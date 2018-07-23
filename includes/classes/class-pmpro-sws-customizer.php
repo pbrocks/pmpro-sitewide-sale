@@ -10,7 +10,7 @@ class PMPro_SWS_Customizer {
 		add_action( 'customize_register', array( __CLASS__, 'engage_the_customizer' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'pmpro_sws_dashboard_menu' ) );
 		add_action( 'wp_head', array( __CLASS__, 'pmpro_show_info' ) );
-		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'customizer_enqueue_inline' ) );
+		// add_action( 'wp_enqueue_scripts', array( __CLASS__, 'customizer_enqueue_inline' ) );
 		// add_action( 'admin_enqueue_scripts', array( __CLASS__, 'customizer_enqueue' ) );
 		add_action( 'customize_controls_init', array( __CLASS__, 'set_customizer_preview_url' ) );
 	}

@@ -8,6 +8,7 @@ class PMPro_SWS_Dev_Info {
 	public static function init() {
 		add_action( 'load-post.php', array( __CLASS__, 'init_metabox' ) );
 		add_action( 'admin_head', array( __CLASS__, 'dev_script_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'dev_frontend_scripts' ) );
 	}
 
 	/**
@@ -60,6 +61,15 @@ class PMPro_SWS_Dev_Info {
 		echo '<pre>';
 		echo '<h4>' . __CLASS__ . '</h4>';
 		print_r( $sws_settings );
+		echo '</pre>';
+	}
+
+	public static function dev_frontend_scripts() {
+		echo '<span style="color:salmon;">Find this code in ' . __FILE__ . ' in </span>' . __FUNCTION__;
+		$options = get_option( 'pmpro_sitewide_sale' );
+		$options = PMPro_SWS_Settings::pmprosws_get_options();
+		echo '<pre>';
+		print_r( $options );
 		echo '</pre>';
 	}
 

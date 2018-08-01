@@ -25,6 +25,7 @@ require_once PMPROSWS_DIR . '/includes/classes/class-pmpro-sws-reports.php';
 require_once PMPROSWS_DIR . '/includes/classes/class-pmpro-sws-settings.php';
 require_once PMPROSWS_DIR . '/includes/classes/class-pmpro-sws-setup.php';
 require_once PMPROSWS_DIR . '/includes/classes/class-pmpro-sws-templates.php';
+require_once PMPROSWS_DIR . '/includes/classes/class-suggestions-for-pmpro-core.php';
 
 PMPro_SWS_Banners::init();
 PMPro_SWS_Dev_Info::init();
@@ -32,27 +33,5 @@ PMPro_Fold_into_Core::init();
 PMPro_SWS_Reports::init();
 PMPro_SWS_Settings::init();
 PMPro_SWS_Setup::init();
+Suggestions_for_PMPro_Core::init();
 
-
-/**
- * Enqueues selectWoo
- */
-function pmpro_sws_admin_scripts() {
-	$screen = get_current_screen();
-
-	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	wp_register_script( 'selectWoo', plugins_url( 'includes/js/selectWoo.full' . $suffix . '.js', __FILE__ ), array( 'jquery' ), '1.0.4' );
-	wp_enqueue_script( 'selectWoo' );
-	wp_register_style( 'selectWooCSS', plugins_url( 'includes/css/selectWoo' . $suffix . '.css', __FILE__ ) );
-	wp_enqueue_style( 'selectWooCSS' );
-}
-add_action( 'admin_enqueue_scripts', 'pmpro_sws_admin_scripts' );
-
-/**
- * Enqueues selectWoo
- */
-function pmpro_sws_frontend_scripts() {
-	wp_register_style( 'frontend', plugins_url( 'includes/css/frontend.css', __FILE__ ), '1.1' );
-	wp_enqueue_style( 'frontend' );
-}
-add_action( 'wp_enqueue_scripts', 'pmpro_sws_frontend_scripts' );

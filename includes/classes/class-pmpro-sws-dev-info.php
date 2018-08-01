@@ -15,6 +15,7 @@ class PMPro_SWS_Dev_Info {
 	 */
 	public static function init_metabox() {
 		$instance = new PMPro_SWS_MetaBoxes();
+		add_action( 'admin_menu', array( $instance, 'sidetrack_dashboard' ) );
 		// $metabox = $instance->init_metabox();
 		// $metabox = self::create_metabox_instance();
 		add_action( 'add_meta_boxes', array( $instance, 'add_sws_metaboxes' ) );
@@ -22,6 +23,46 @@ class PMPro_SWS_Dev_Info {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'metaboxes_above_editor' ), 7 );
 		add_action( 'edit_form_after_title', array( $instance, 'move_metaboxes_above_editor' ) );
 		// add_action( 'save_post', 'pmpro_sws_save_cpt', 10, 2 );
+	}
+	/**
+	 * Add a page to the dashboard menu.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	public static function sidetrack_dashboard() {
+		$slug = preg_replace( '/_+/', '-', __FUNCTION__ );
+		$label = ucwords( preg_replace( '/_+/', ' ', __FUNCTION__ ) );
+		add_dashboard_page( __( $label, 'pmpro-add-ons-menu' ), __( $label, 'pmpro-add-ons-menu' ), 'manage_options', $slug . '.php', 'sidetrack_dashboard_page' );
+	}
+
+
+	/**
+	 * Debug Information
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $html Optional. Return as HTML or not
+	 *
+	 * @return string
+	 */
+	public static function sidetrack_dashboard_page() {
+		echo '<div class="wrap">';
+		echo '<h2>' . __FUNCTION__ . '</h2>';
+		$screen = get_current_screen();
+		echo '<h4 style="color:rgba(250,128,114,.7);">Current Screen is <span style="color:rgba(250,128,114,1);">' . $screen->id . '</span></h4>';
+		$my_theme = wp_get_theme();
+		echo '<h4>Theme is ' . sprintf(
+			__( '%1$s and is version %2$s', 'text-domain' ),
+			$my_theme->get( 'Name' ),
+			$my_theme->get( 'Version' )
+		) . '</h4>';
+		echo '<h4>Templates found in ' . get_template_directory() . '</h4>';
+		echo '<h4>Stylesheet found in ' . get_stylesheet_directory() . '</h4>';
+		$registered_banners = PMPro_SWS_Banners::get_registered_banners();
+
+		echo '</div>';
 	}
 	public static function create_metabox_instance() {
 		$instance = new PMPro_SWS_MetaBoxes();

@@ -13,6 +13,8 @@ class PMPro_SWS_Setup {
 	public static function init() {
 		add_filter( 'renaming_cpt_menu_filter', array( __CLASS__, 'pmpro_sws_cpt_name' ) );
 		register_activation_hook( PMPROSWS_BASENAME, array( __CLASS__, 'pmpro_sws_admin_notice_activation_hook' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'pmpro_sws_admin_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'pmpro_sws_frontend_scripts' ) );
 		add_action( 'init', array( __CLASS__, 'pmpro_sws_check_cookie' ) );
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'pmpro_sws_plugin_row_meta' ), 10, 2 );
 		add_filter( 'plugin_action_links_' . PMPROSWS_BASENAME, array( __CLASS__, 'pmpro_sws_plugin_action_links' ) );
@@ -22,6 +24,7 @@ class PMPro_SWS_Setup {
 		$label = 'All PMPro CPTs';
 		return $label;
 	}
+
 	/**
 	 * Runs only when the plugin is activated.
 	 *
@@ -30,6 +33,26 @@ class PMPro_SWS_Setup {
 	public static function pmpro_sws_admin_notice_activation_hook() {
 		// Create transient data.
 		set_transient( 'pmpro-sws-admin-notice', true, 5 );
+	}
+
+	/**
+	 * Enqueues selectWoo
+	 */
+	public static function pmpro_sws_admin_scripts() {
+		$screen = get_current_screen();
+
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		wp_register_script( 'selectWoo', plugins_url( 'includes/js/selectWoo.full' . $suffix . '.js', __FILE__ ), array( 'jquery' ), '1.0.4' );
+		wp_enqueue_script( 'selectWoo' );
+		wp_register_style( 'selectWooCSS', plugins_url( 'includes/css/selectWoo' . $suffix . '.css', __FILE__ ) );
+		wp_enqueue_style( 'selectWooCSS' );
+	}
+	/**
+	 * Enqueues selectWoo
+	 */
+	public static function pmpro_sws_frontend_scripts() {
+		wp_register_style( 'frontend', plugins_url( 'includes/css/frontend.css', __FILE__ ), '1.1' );
+		wp_enqueue_style( 'frontend' );
 	}
 
 
@@ -88,12 +111,12 @@ class PMPro_SWS_Setup {
 	public static function pmpro_sws_admin_notice() {
 		// Check transient, if available display notice.
 		if ( get_transient( 'pmpro-sws-admin-notice' ) ) { ?>
-			<div class="updated notice is-dismissible">
-				<p><?php printf( __( 'Thank you for activating. <a href="%s">Visit the settings page</a> to get started with the Sitewide Sale Add On.', 'pmpro-sitewide-sale' ), get_admin_url( null, 'admin.php?page=pmpro-sws' ) ); ?></p>
-			</div>
-			<?php
-			// Delete transient, only display this notice once.
-			delete_transient( 'pmpro-sws-admin-notice' );
+				<div class="updated notice is-dismissible">
+					<p><?php printf( __( 'Thank you for activating. <a href="%s">Visit the settings page</a> to get started with the Sitewide Sale Add On.', 'pmpro-sitewide-sale' ), get_admin_url( null, 'admin.php?page=pmpro-add-ons.php' ) ); ?></p>
+				</div>
+				<?php
+				// Delete transient, only display this notice once.
+				delete_transient( 'pmpro-sws-admin-notice' );
 		}
 	}
 
@@ -105,7 +128,7 @@ class PMPro_SWS_Setup {
 	public static function pmpro_sws_plugin_action_links( $links ) {
 		if ( current_user_can( 'manage_options' ) ) {
 			$new_links = array(
-				'<a href="' . get_admin_url( null, 'admin.php?page=pmpro-sws' ) . '">' . __( 'Settings', 'pmpro-sitewide-sale' ) . '</a>',
+				'<a href="' . get_admin_url( null, 'admin.php?page=pmpro-add-ons.php' ) . '">' . __( 'Settings', 'pmpro-sitewide-sale' ) . '</a>',
 			);
 		}
 		return array_merge( $new_links, $links );
@@ -123,7 +146,7 @@ class PMPro_SWS_Setup {
 				'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/sitewide-sale/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro-sitewide-sale' ) . '</a>',
 				'<a href="' . esc_url( 'https://www.paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro-sitewide-sale' ) . '</a>',
 			);
-			$links     = array_merge( $links, $new_links );
+			$links = array_merge( $links, $new_links );
 		}
 		return $links;
 	}

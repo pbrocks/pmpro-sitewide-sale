@@ -14,6 +14,7 @@
  */
 namespace PMPro_Sitewide_Sale;
 
+echo '<h4 style="text-align:center;">' . __NAMESPACE__ . '</h4>';
 defined( 'ABSPATH' ) || die( 'File cannot be accessed directly' );
 
 define( 'PMPROSWS_DIR', dirname( __FILE__ ) );

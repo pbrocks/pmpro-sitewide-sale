@@ -1,4 +1,4 @@
-jQuery( document ).ready(function($) {
+jQuery(document).ready(function($) {
 	var filename = 'pmpro-sws-reports.js';
 
 	$("#pmpro_sws_sitewide_sale_select").selectWoo();

@@ -12,6 +12,7 @@ class PMPro_SWS_Post_Types {
 	 * @return [type] [description]
 	 */
 	public static function init() {
+		add_action( 'admin_menu', array( __CLASS__, 'sitewide_sales' ) );
 		add_action( 'init', array( __CLASS__, 'register_sitewide_sale_cpt' ) );
 		add_filter( 'manage_sws_sitewide_sale_posts_columns', array( __CLASS__, 'set_sitewide_sale_columns' ) );
 		add_action( 'manage_sws_sitewide_sale_posts_custom_column', array( __CLASS__, 'fill_sitewide_sale_columns' ), 10, 2 );
@@ -24,9 +25,24 @@ class PMPro_SWS_Post_Types {
 	 *
 	 * @return [type] [description]
 	 */
-	public static function renaming_cpt_menu_function() {
-		$renaming_menu = apply_filters( 'renaming_cpt_menu_filter', 'PMPro CPTs' );
-		return $renaming_menu;
+	public static function sitewide_sales() {
+		// add_dashboard_page( __( 'Sitewide Sale', 'pmpro-sitewide-sale' ), __( 'Sitewide Sale', 'pmpro-sitewide-sale' ), 'manage_options', 'sitewide-sale-dash.php', array( __CLASS__, 'sitewide_sales_page' ) );
+		add_submenu_page( 'pmpro-membershiplevels', __( 'Sitewide Sale', 'pmpro-sitewide-sale' ), __( 'Sitewide Sale', 'pmpro-sitewide-sale' ), 'manage_options', 'sitewide_sale', array( __CLASS__, 'sitewide_sales_page' ) );
+		add_submenu_page( 'pmpro-membershiplevels', __( 'Second Sale', 'pmpro-second-sale' ), __( 'Second Sale', 'pmpro-second-sale' ), 'manage_options', 'second_sale', array( __CLASS__, 'second_sales_page' ) );
+	}
+	public static function sitewide_sales_page() {
+		echo '<div class="wrap">';
+		echo '<h3>' . __NAMESPACE__ . '</h3>';
+		echo '<h4>' . __CLASS__ . '</h4>';
+		echo '<h1>' . __FUNCTION__ . '</h1>';
+		echo '</div>';
+	}
+	public static function second_sales_page() {
+		echo '<div class="wrap">';
+		echo '<h3>' . __NAMESPACE__ . '</h3>';
+		echo '<h4>' . __CLASS__ . '</h4>';
+		echo '<h2>' . __FUNCTION__ . '</h2>';
+		echo '</div>';
 	}
 
 	/**
@@ -36,11 +52,10 @@ class PMPro_SWS_Post_Types {
 	 */
 	public static function register_sitewide_sale_cpt() {
 		$labels = self::get_label_defaults();
-		$menu_name = self::renaming_cpt_menu_function();
 		$labels['name']     = _x( 'Sitewide Sales', 'Post Type General Name', 'pmpro-sitewide-sale' );
 		$labels['singular_name']         = _x( 'Sitewide Sale', 'Post Type Singular Name', 'pmpro-sitewide-sale' );
 		$labels['all_items']             = __( 'All Sitewide Sales', 'pmpro-sitewide-sale' );
-		$labels['menu_name']             = __( $menu_name, 'pmpro-sitewide-sale' );
+		$labels['menu_name']             = __( 'Sitewide Sale', 'pmpro-sitewide-sale' );
 		$labels['name_admin_bar']        = __( 'Sitewide Sales', 'pmpro-sitewide-sale' );
 		$labels['add_new_item']        = __( 'Add New Sitewide Sale', 'pmpro-sitewide-sale' );
 
@@ -50,6 +65,7 @@ class PMPro_SWS_Post_Types {
 		$args['labels'] = $labels;
 		$args['public']  = false;
 		$args['menu_icon']           = 'dashicons-id';
+		$args['show_in_menu']        = 'sitewide_sale';
 		$args['has_archive']         = true;
 		$args['taxonomies']          = array( 'sidecat' );
 		$args['supports']            = array(

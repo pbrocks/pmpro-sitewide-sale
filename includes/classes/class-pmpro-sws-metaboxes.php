@@ -159,7 +159,7 @@ class PMPro_SWS_MetaBoxes {
 	 *
 	 * @return [type]          [description]
 	 */
-	function remove_editor_buttons2( $buttons ) {
+	public static function remove_editor_buttons2( $buttons ) {
 		$remove_buttons = array(
 			'formatselect',
 			'strikethrough',

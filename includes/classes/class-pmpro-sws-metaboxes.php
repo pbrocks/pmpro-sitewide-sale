@@ -65,7 +65,10 @@ class PMPro_SWS_MetaBoxes {
 			array( __CLASS__, 'display_step_1' ),
 			array( 'sws_sitewide_sale' ),
 			'normal',
-			'high'
+			'high',
+			array(
+				'__block_editor_compatible_meta_box' => false,
+			)
 		);
 		add_meta_box(
 			'pmpro_sws_cpt_step_2',
@@ -73,7 +76,10 @@ class PMPro_SWS_MetaBoxes {
 			array( __CLASS__, 'display_step_2' ),
 			array( 'sws_sitewide_sale' ),
 			'normal',
-			'high'
+			'high',
+			array(
+				'__block_editor_compatible_meta_box' => false,
+			)
 		);
 		add_meta_box(
 			'pmpro_sws_cpt_step_3',
@@ -291,13 +297,17 @@ class PMPro_SWS_MetaBoxes {
 		?>
 			<table>
 			<tr>
-				<th scope="row" valign="top"><label for="pmpro_sws_start_date"><?php _e( 'Sale Start Date', 'pmpro-sitewide-sale' );?>:</label></th>
+				<th scope="row" valign="top"><label for="pmpro_sws_start_date"><?php _e( 'Sale Start Date', 'pmpro-sitewide-sale' ); ?>:</label></th>
 				<td>
 					<select name="pmpro_sws_start_month">
 						<?php
 						for ( $i = 1; $i < 13; $i++ ) {
 							?>
-							<option value="<?php echo esc_html( $i ); ?>" <?php if ($i == $start_month) { ?>selected="selected"<?php } ?>><?php echo date_i18n("M", strtotime($i . "/1/" . $start_year, current_time("timestamp")))?></option>
+							<option value="<?php echo esc_html( $i ); ?>" 
+														<?php
+														if ( $i == $start_month ) {
+							?>
+							selected="selected"<?php } ?>><?php echo date_i18n( 'M', strtotime( $i . '/1/' . $start_year, current_time( 'timestamp' ) ) ); ?></option>
 							<?php
 						}
 						?>
@@ -307,13 +317,17 @@ class PMPro_SWS_MetaBoxes {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row" valign="top"><label for="pmpro_sws_end_date"><?php _e('Sale End Date', 'pmpro-sitewide-sale' );?>:</label></th>
+				<th scope="row" valign="top"><label for="pmpro_sws_end_date"><?php _e( 'Sale End Date', 'pmpro-sitewide-sale' ); ?>:</label></th>
 				<td>
 					<select name="pmpro_sws_end_month">
 						<?php
 						for ( $i = 1; $i < 13; $i++ ) {
 							?>
-							<option value="<?php echo esc_html( $i ); ?>" <?php if ( $i == $end_month ) { ?>selected="selected"<?php } ?>><?php echo date_i18n("M", strtotime($i . "/1/" . $end_year, current_time("timestamp")))?></option>
+							<option value="<?php echo esc_html( $i ); ?>" 
+														<?php
+														if ( $i == $end_month ) {
+							?>
+							selected="selected"<?php } ?>><?php echo date_i18n( 'M', strtotime( $i . '/1/' . $end_year, current_time( 'timestamp' ) ) ); ?></option>
 							<?php
 						}
 						?>
@@ -502,8 +516,10 @@ class PMPro_SWS_MetaBoxes {
 	echo '
 	<hr>
 	<h3>' . esc_html__( 'Previewing Banner', 'pmpro-sitewide-sale' ) . '</h3>' .
-	'<p>' . esc_html__( 'To test the banner for this sale without it having to be active, navigate to the webpage
-	you would like to test on and add \'', 'pmpro-sitewide-sale' ) . '?pmpro_sws_preview_sale_banner=' . $post->ID .
+	'<p>' . esc_html__(
+		'To test the banner for this sale without it having to be active, navigate to the webpage
+	you would like to test on and add \'', 'pmpro-sitewide-sale'
+	) . '?pmpro_sws_preview_sale_banner=' . $post->ID .
 	'\', with the \'?\' being an \'&\' if there are already parameters in the url.' .
 	'</p>' .
 	'<p>' . esc_html__( 'Additionally, you can test what a specific kind of banner will look like by adding \'', 'pmpro-sitewide-sale' ) .
@@ -610,7 +626,6 @@ class PMPro_SWS_MetaBoxes {
 			die( '<br/>Nonce failed' );
 		}
 
-
 		global $wpdb;
 
 		if ( isset( $_POST['pmpro_sws_discount_code_id'] ) ) {
@@ -624,7 +639,7 @@ class PMPro_SWS_MetaBoxes {
 		} else {
 			update_post_meta( $post_id, 'landing_page_post_id', false );
 		}
-		
+
 		if ( isset( $_POST['pmpro_sws_start_day'] ) && is_numeric( $_POST['pmpro_sws_start_day'] ) &&
 				isset( $_POST['pmpro_sws_start_month'] ) && is_numeric( $_POST['pmpro_sws_start_month'] ) &&
 				isset( $_POST['pmpro_sws_start_year'] ) && is_numeric( $_POST['pmpro_sws_start_year'] ) &&
@@ -733,7 +748,7 @@ class PMPro_SWS_MetaBoxes {
 			$options['active_sitewide_sale_id'] = false;
 		}
 		PMPro_SWS_Settings::pmprosws_save_options( $options );
-		
+
 		if ( isset( $_POST['pmpro_sws_create_discount'] ) ) {
 			wp_redirect( esc_html( get_admin_url() ) . 'admin.php?page=pmpro-discountcodes&edit=-1&pmpro_sws_callback=' . $post_id );
 			exit();
